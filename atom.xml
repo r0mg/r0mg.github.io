@@ -1,10 +1,10 @@
 <?xml version="1.0" encoding="utf-8"?>
 <feed xmlns="http://www.w3.org/2005/Atom">
 
-  <title><![CDATA[Roslynn's Ramblins]]></title>
+  <title><![CDATA[Roslynn's Ramblings]]></title>
   <link href="http://r0mg.github.io/atom.xml" rel="self"/>
   <link href="http://r0mg.github.io/"/>
-  <updated>2015-09-28T18:13:45-04:00</updated>
+  <updated>2015-10-16T07:57:35-04:00</updated>
   <id>http://r0mg.github.io/</id>
   <author>
     <name><![CDATA[Roslynn Graves]]></name>
@@ -12,6 +12,41 @@
   </author>
   <generator uri="http://octopress.org/">Octopress</generator>
 
+  
+  <entry>
+    <title type="html"><![CDATA[Databases in Business]]></title>
+    <link href="http://r0mg.github.io/blog/2015/10/15/my-second-post-on-octopress/"/>
+    <updated>2015-10-15T19:52:09-04:00</updated>
+    <id>http://r0mg.github.io/blog/2015/10/15/my-second-post-on-octopress</id>
+    <content type="html"><![CDATA[<p>Learning a programming language often involves thinking in abstractions about things that don&rsquo;t really exist. Particularly at the absolute beginner level, it can be challenging to see the big picture behind organizing pigeons and pokemon, and the level of frustration these exercises are capable of provoking seems highly disproportionate to the problem we&rsquo;re trying to solve. My rational mind understands that we&rsquo;re working toward something much bigger than pigeons and pokemon, but it can be easy to lose sight of the end goal.</p>
+
+<p><img class="left" src="http://placekitten.com/320/250" title="Catabase" >
+One thing that helps me reconcile this frustration is to understand how these abstract concepts are applicable in the real world. When I can see the link between what we&rsquo;re learning and it&rsquo;s potential to effect real change in real things used by real people, I get excited. And databases <em>really</em> excite me.</p>
+
+<p>This has not always been the case. In business school, the concept of database functionality in Enterprise Resource Planning systems (ERPs) was a similar blur of abstraction. I later began to appreciate their importance in ERPs while working as a financial auditor, and this appreciation has only grown since starting my own business (which happens to be centered on data integrity). Now, as we&rsquo;re learning how to manipulate relational data with Ruby, I decided to look back at those ERPs concepts and see how they&rsquo;re relevant to a budding programmer.</p>
+
+<p><img class="right" src="http://www.inddist.com/sites/inddist.com/files/ERP-Graphic.jpg" width="450" height="450">
+So, what&rsquo;s an ERPs, and why should we care?</p>
+
+<p>Basically, an ERPs is an interactive database of databases. More formally, it’s a suite of integrated software applications that transmit sets of data to one another as they relate to a business’s resources - ex: cash balances, payment obligations, inventory usage, production capacity, payroll, sales revenue, etc. Each department in the business will typically collect, store, manage and/or interpret the data generated from within the department, and the ERP facilitates the flow of data between the departments. For example, the Finance/Accounting department would be able to trace an increase in expenses to the Manufacturing department, whose records show increased production of product X, the increased production of which was prompted by increased demand for product X per the data obtained from Customer Relations.</p>
+
+<p>Demo: <a href="http://www.weberp.org/weberp/index.php">http://www.weberp.org/weberp/index.php</a></p>
+
+<p>Where older systems limited departmental data to local networks, the web-based software in ERPs permits employees, customers and suppliers real-time access to data. This is relevant to developers as the push to even greater levels of interactivity has prompted increased efforts to integrate mobile devices with current systems.</p>
+
+<p><img class="left" src="http://www.vkinfotek.com/hpi/erpappdesign.gif"></p>
+
+<p>Other considerations&hellip;:</p>
+
+<ul>
+<li>Lots of opportunity in ERP software development due to widespread implementation, evolving systems, and customization of systems</li>
+<li>Requires that the programming team has a solid understanding of the organization&rsquo;s specific business processes (maybe even better than the employees have themselves)</li>
+<li>Scope of design</li>
+<li>MVC!!!</li>
+</ul>
+
+]]></content>
+  </entry>
   
   <entry>
     <title type="html"><![CDATA[My First Post on Octopress]]></title>
