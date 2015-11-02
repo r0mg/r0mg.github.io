@@ -4,7 +4,7 @@
   <title><![CDATA[Category: School | Roslynn's Ramblings]]></title>
   <link href="http://r0mg.github.io/blog/categories/school/atom.xml" rel="self"/>
   <link href="http://r0mg.github.io/"/>
-  <updated>2015-11-01T21:06:13-05:00</updated>
+  <updated>2015-11-02T04:42:09-05:00</updated>
   <id>http://r0mg.github.io/</id>
   <author>
     <name><![CDATA[Roslynn Graves]]></name>
@@ -15,9 +15,9 @@
   
   <entry>
     <title type="html"><![CDATA[Visualizing Schema With Rails-ERD]]></title>
-    <link href="http://r0mg.github.io/blog/2015/11/01/visualizing-relationships-with-railroady/"/>
+    <link href="http://r0mg.github.io/blog/2015/11/01/visualizing-relationships-with-rails-erd/"/>
     <updated>2015-11-01T16:44:05-05:00</updated>
-    <id>http://r0mg.github.io/blog/2015/11/01/visualizing-relationships-with-railroady</id>
+    <id>http://r0mg.github.io/blog/2015/11/01/visualizing-relationships-with-rails-erd</id>
     <content type="html"><![CDATA[<p><img class="right" src="/images/scheduler_pic.png" width="250" height="250" title="Class Visual" >
 Establishing appropriate relationships between objects is fundamental in developing a functional app. As our apps increase in complexity, so does the level of abstraction in describing these relationships (what IS a post-tag, anyway?). A good way to get started is usually to draw it out, as we often do in class.</p>
 
