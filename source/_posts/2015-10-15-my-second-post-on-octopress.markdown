@@ -3,7 +3,7 @@ layout: post
 title: "Databases in Business"
 date: 2015-10-15 19:52:09 -0400
 comments: true
-categories: 
+categories: Flatiron School
 ---
 Learning a programming language often involves thinking in abstractions about things that don't really exist. Particularly at the absolute beginner level, it can be challenging to see the big picture behind organizing pigeons and pokemon, and the level of frustration these exercises are capable of provoking seems highly disproportionate to the problem we're trying to solve. My rational mind understands that we're working toward something much bigger than pigeons and pokemon, but it can be easy to lose sight of the end goal. 
 
