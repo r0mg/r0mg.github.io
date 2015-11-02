@@ -5,7 +5,7 @@
 <!--[if (gt IE 8)|(gt IEMobile 7)|!(IEMobile)|!(IE)]><!--><html class="no-js" lang="en"><!--<![endif]-->
 <head>
   <meta charset="utf-8">
-  <title>Roslynn's Ramblings</title>
+  <title>Visualizing Schema With Rails-ERD - Roslynn's Ramblings</title>
   <meta name="author" content="Roslynn Graves">
 
   
@@ -18,7 +18,7 @@
   <meta name="viewport" content="width=device-width, initial-scale=1">
 
   
-  <link rel="canonical" href="http://r0mg.github.io">
+  <link rel="canonical" href="http://r0mg.github.io/blog/2015/11/01/visualizing-relationships-with-railroady">
   <link href="/favicon.ico" rel="icon">
   <link href="/stylesheets/screen.css" media="screen, projection" rel="stylesheet" type="text/css">
   <link href="/atom.xml" rel="alternate" title="Roslynn's Ramblings" type="application/atom+xml">
@@ -63,15 +63,12 @@
 </nav>
   <div id="main">
     <div id="content">
-      <div class="blog-index">
+      <div>
+<article class="hentry" role="article">
   
-  
-  
-    <article>
-      
   <header>
     
-      <h1 class="entry-title"><a href="/blog/2015/11/01/visualizing-relationships-with-railroady/">Visualizing Schema With Rails-ERD</a></h1>
+      <h1 class="entry-title">Visualizing Schema With Rails-ERD</h1>
     
     
       <p class="meta">
@@ -87,7 +84,7 @@
   </header>
 
 
-  <div class="entry-content"><p><img class="right" src="/images/scheduler_pic.png" width="250" height="250" title="Class Visual" >
+<div class="entry-content"><p><img class="right" src="/images/scheduler_pic.png" width="250" height="250" title="Class Visual" >
 Establishing appropriate relationships between objects is fundamental in developing a functional app. As our apps increase in complexity, so does the level of abstraction in describing these relationships (what IS a post-tag, anyway?). A good way to get started is usually to draw it out, as we often do in class.</p>
 
 <p>This is a great first step for visual learners like myself. In fact, I find it so useful in understanding the various &ldquo;has-many&rdquo; and &ldquo;has-many-through&rdquo; relationships that I almost always start off each lab by physically mapping out the schema and drawing the connecting lines between associated attributes.</p>
@@ -130,102 +127,53 @@ While this method has certainly helped me figure out which associations need to 
 
 <p>A comprehensive list of customization options can be found <a href="http://rails-erd.rubyforge.org/customise.html">here</a>. There&rsquo;s also a Rails-ERD API that can be used to extend and/or customize generated output, but that&rsquo;s for another blog ;)</p>
 </div>
-  
-  
 
 
-    </article>
-  
-  
-    <article>
+  <footer>
+    <p class="meta">
       
-  <header>
-    
-      <h1 class="entry-title"><a href="/blog/2015/10/15/my-second-post-on-octopress/">Databases in Business</a></h1>
-    
-    
-      <p class="meta">
-        
-
-
-
-
-<time class='entry-date' datetime='2015-10-15T19:52:09-04:00'><span class='date'><span class='date-month'>Oct</span> <span class='date-day'>15</span><span class='date-suffix'>th</span>, <span class='date-year'>2015</span></span> <span class='time'>7:52 pm</span></time>
-        
-      </p>
-    
-  </header>
-
-
-  <div class="entry-content"><p>Learning a programming language often involves thinking in abstractions about things that don&rsquo;t really exist. Particularly at the absolute beginner level, it can be challenging to see the big picture behind organizing pigeons and pokemon, and the level of frustration these exercises are capable of provoking seems highly disproportionate to the problem we&rsquo;re trying to solve. My rational mind understands that we&rsquo;re working toward something much bigger than pigeons and pokemon, but it can be easy to lose sight of the end goal.</p>
-
-<p><img class="left" src="http://placekitten.com/320/250" title="Catabase" >
-One thing that helps me reconcile this frustration is to understand how these abstract concepts are applicable in the real world. When I can see the link between what we&rsquo;re learning and it&rsquo;s potential to effect real change in real things used by real people, I get excited. And databases <em>really</em> excite me.</p>
-
-<p>This has not always been the case. In business school, the concept of database functionality in Enterprise Resource Planning systems (ERPs) was a similar blur of abstraction. I later began to appreciate their importance in ERPs while working as a financial auditor, and this appreciation has only grown since starting my own business (which happens to be centered on data integrity). Now, as we&rsquo;re learning how to manipulate relational data with Ruby, I decided to look back at those ERPs concepts and see how they&rsquo;re relevant to a budding programmer.</p>
-
-<p><img class="right" src="http://www.inddist.com/sites/inddist.com/files/ERP-Graphic.jpg" width="450" height="450">
-So, what&rsquo;s an ERPs, and why should we care?</p>
-
-<p>Basically, an ERPs is an interactive database of databases. More formally, it’s a suite of integrated software applications that transmit sets of data to one another as they relate to a business’s resources - ex: cash balances, payment obligations, inventory usage, production capacity, payroll, sales revenue, etc. Each department in the business will typically collect, store, manage and/or interpret the data generated from within the department, and the ERP facilitates the flow of data between the departments. For example, the Finance/Accounting department would be able to trace an increase in expenses to the Manufacturing department, whose records show increased production of product X, the increased production of which was prompted by increased demand for product X per the data obtained from Customer Relations.</p>
-
-<p>Demo: <a href="http://www.weberp.org/weberp/index.php">http://www.weberp.org/weberp/index.php</a></p>
-
-<p>Where older systems limited departmental data to local networks, the web-based software in ERPs permits employees, customers and suppliers real-time access to data. This is relevant to developers as the push to even greater levels of interactivity has prompted increased efforts to integrate mobile devices with current systems.</p>
-
-<p><img class="left" src="http://www.vkinfotek.com/hpi/erpappdesign.gif"></p>
-
-<p>Other considerations&hellip;:</p>
-
-<ul>
-<li>Lots of opportunity in ERP software development due to widespread implementation, evolving systems, and customization of systems</li>
-<li>Requires that the programming team has a solid understanding of the organization&rsquo;s specific business processes (maybe even better than the employees have themselves)</li>
-<li>Scope of design</li>
-<li>MVC!!!</li>
-</ul>
-
-</div>
-  
   
 
+<span class="byline author vcard">Posted by <span class="fn">Roslynn Graves</span></span>
 
-    </article>
-  
-  
-    <article>
       
-  <header>
+
+
+
+
+<time class='entry-date' datetime='2015-11-01T16:44:05-05:00'><span class='date'><span class='date-month'>Nov</span> <span class='date-day'>1</span><span class='date-suffix'>st</span>, <span class='date-year'>2015</span></span> <span class='time'>4:44 pm</span></time>
+      
+
+<span class="categories">
+  
+    <a class='category' href='/blog/categories/flatiron/'>flatiron</a>, <a class='category' href='/blog/categories/school/'>school</a>
+  
+</span>
+
+
+    </p>
     
-      <h1 class="entry-title"><a href="/blog/2015/09/28/my-first-post-on-octopress/">My First Post on Octopress</a></h1>
-    
-    
-      <p class="meta">
-        
-
-
-
-
-<time class='entry-date' datetime='2015-09-28T18:08:24-04:00'><span class='date'><span class='date-month'>Sep</span> <span class='date-day'>28</span><span class='date-suffix'>th</span>, <span class='date-year'>2015</span></span> <span class='time'>6:08 pm</span></time>
-        
-      </p>
-    
-  </header>
-
-
-  <div class="entry-content"><p>Hello, World.</p>
+      <div class="sharing">
+  
+  <a href="//twitter.com/share" class="twitter-share-button" data-url="http://r0mg.github.io/blog/2015/11/01/visualizing-relationships-with-railroady/" data-via="" data-counturl="http://r0mg.github.io/blog/2015/11/01/visualizing-relationships-with-railroady/" >Tweet</a>
+  
+  
+  
 </div>
-  
-  
 
+    
+    <br />
+    <p class="meta">
+      
+        <a class="basic-alignment left" href="/blog/2015/10/15/my-second-post-on-octopress/" title="Previous Post: Databases in Business">&laquo; Databases in Business</a>
+      
+      
+    </p>
+  </footer>
+</article>
 
-    </article>
-  
-  <div class="pagination">
-    
-    <a href="/blog/archives">Blog Archives</a>
-    
-  </div>
 </div>
+
 <aside class="sidebar">
   
     <section>
@@ -253,6 +201,7 @@ So, what&rsquo;s an ERPs, and why should we care?</p>
 
   
 </aside>
+
 
     </div>
   </div>
