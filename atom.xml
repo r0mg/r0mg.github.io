@@ -4,7 +4,7 @@
   <title><![CDATA[Roslynn's Ramblings]]></title>
   <link href="http://r0mg.github.io/atom.xml" rel="self"/>
   <link href="http://r0mg.github.io/"/>
-  <updated>2015-11-19T03:55:31-05:00</updated>
+  <updated>2015-12-09T19:30:18-05:00</updated>
   <id>http://r0mg.github.io/</id>
   <author>
     <name><![CDATA[Roslynn Graves]]></name>
@@ -12,6 +12,80 @@
   </author>
   <generator uri="http://octopress.org/">Octopress</generator>
 
+  
+  <entry>
+    <title type="html"><![CDATA[Sending Timed Emails Through ActiveJob]]></title>
+    <link href="http://r0mg.github.io/blog/2015/12/08/sending-timed-emails-through-activejob/"/>
+    <updated>2015-12-08T18:36:08-05:00</updated>
+    <id>http://r0mg.github.io/blog/2015/12/08/sending-timed-emails-through-activejob</id>
+    <content type="html"><![CDATA[<p>I&rsquo;ve learned a lot about sending email through Rails during this project mode. Since our app (eBae) is an auction site with varying bidding windows and auction end times, our team thought it would be neat to go a step beyond a generic email notification to alert interested bidders when the end times for their watched items was soon approaching.</p>
+
+<p>To do this, we made a new &ldquo;watchlist&rdquo; mailer to send email notifications when items are added or removed from the watchlist, and a reminder for when the end time for an item on the watchlist is one hour away. The challenge in setting up the reminder notification is the time variance. Where our other mailers were instantiated through a create action (such as a new user account, or new sale), the reminder email would need to have a background process running to monitor the remaining time.</p>
+
+<p>Enter ActiveJob. Per the RailsGuides, &ldquo;Active Job is a framework for declaring jobs and making them run on a variety of queuing backends.&rdquo;
+When a &ldquo;Job&rdquo; is created, the task it is to perform is placed in a queue for a designmated amount of time. These queues are maintained by built-in adapters such as Sidekiq, Resque, and Delayed Job. For the purposes of sending reminder e-mails, Delayed Job does the trick.</p>
+
+<p>The first step in sending a reminder email is to generate a new Job:</p>
+
+<div class="console"><pre><code class="console"><span class="gp">// ♡</span> rails g job reminder_email   
+</code></pre>
+</div>
+
+
+<p>This step generates <code>reminder_email_job.rb</code> file in the <code>app/jobs directory.</code></p>
+
+<p>Within this file, the <code>perform</code> is defined as follows:</p>
+
+<div class="console"><pre><code class="html"><span class="gp">
+class ReminderEmailJob < ActiveJob::Base
+  queue_as :default
+
+  def perform(watchlist)
+    @watchlist = watchlist
+    WatchlistMailer.item_ending(@watchlist).deliver_later
+  end
+end
+</code></pre>
+</div>
+
+
+<p>The same argument <code>(watchlist)</code> that would normally be passed directly into the mailer from the controller is instead passed into the <code>ReminderEmailJob</code>, which is then passed into the regular mailer by calling on the appropriate method. In this case, the method in the <code>WatchlistMailer</code> to send out the reminder is <code>item_ending</code>.</p>
+
+<p>The next step is to modify the controller action. Prior to implementing the job, the mailer action in the create method would probably look something like this:</p>
+
+<div class="console"><pre><code class="html"><span class="gp">
+WatchlistMailer.item_ending(watchlist).deliver_now
+</code></pre>
+</div>
+
+
+<p>With the Job in place, it changes to the following:</p>
+
+<div class="console"><pre><code class="html"><span class="gp">
+EndingEmailJob.set(wait_until: watchlist.alert_time).perform_later(watchlist)
+</span></code></pre>
+</div>
+
+
+<p>&hellip;which directs the mailer action to the Job. Note that the <code>wait_until: watchlist.alert_time</code> is what determines the length of the delay. In this case, an <code>alert_time</code> method was defined in the  model to be one hour before a watched listing&rsquo;s ending time. Time parameters for delayed jobs are highly customizable.</p>
+
+<p>The last step is to configure the Delayed Jobs backend adapter for the backend process.</p>
+
+<ol>
+<li>Add <code>gem &lsquo;delayed_job_active_record&rsquo;</code> to the Gemfile</li>
+<li>Run the following from the terminal:
+<code class="console"><span class="gp">
+// ♡ bundle
+// ♡  rails generate delayed_job:active_record
+// ♡  rake db:migrate
+</span></code></li>
+<li>Add <code>config.active_job.queue_adapter = :delayed_job</code> to the <code>/config/environments/production.rb</code> and <code>/config/environments/development.rb</code> files.</li>
+<li>Run <code>// ♡ bundle exec rake jobs:work</code> alongside <code>rails s</code> to run the jobs in queue. While running the localhost, this must be running in the backend to ensure that the delayed jobs are processed.</li>
+<li>Enjoy!</li>
+</ol>
+
+]]></content>
+  </entry>
   
   <entry>
     <title type="html"><![CDATA[There's (Already) an App for That]]></title>

@@ -1,0 +1,263 @@
+
+<!DOCTYPE html>
+<!--[if IEMobile 7 ]><html class="no-js iem7"><![endif]-->
+<!--[if lt IE 9]><html class="no-js lte-ie8"><![endif]-->
+<!--[if (gt IE 8)|(gt IEMobile 7)|!(IEMobile)|!(IE)]><!--><html class="no-js" lang="en"><!--<![endif]-->
+<head>
+  <meta charset="utf-8">
+  <title>Sending Timed Emails Through ActiveJob - Roslynn's Ramblings</title>
+  <meta name="author" content="Roslynn Graves">
+
+  
+  <meta name="description" content="I&rsquo;ve learned a lot about sending email through Rails during this project mode. Since our app (eBae) is an auction site with varying bidding &hellip;">
+  
+
+  <!-- http://t.co/dKP3o1e -->
+  <meta name="HandheldFriendly" content="True">
+  <meta name="MobileOptimized" content="320">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+
+  
+  <link rel="canonical" href="http://r0mg.github.io/blog/2015/12/08/sending-timed-emails-through-activejob">
+  <link href="/favicon.ico" rel="icon">
+  <link href="/stylesheets/screen.css" media="screen, projection" rel="stylesheet" type="text/css">
+  <link href="/atom.xml" rel="alternate" title="Roslynn's Ramblings" type="application/atom+xml">
+  <script src="/javascripts/modernizr-2.0.js"></script>
+  <script src="//ajax.googleapis.com/ajax/libs/jquery/1.9.1/jquery.min.js"></script>
+  <script>!window.jQuery && document.write(unescape('%3Cscript src="./javascripts/libs/jquery.min.js"%3E%3C/script%3E'))</script>
+  <script src="/javascripts/octopress.js" type="text/javascript"></script>
+  <!--Fonts from Google"s Web font directory at http://google.com/webfonts -->
+<link href="//fonts.googleapis.com/css?family=PT+Serif:regular,italic,bold,bolditalic" rel="stylesheet" type="text/css">
+<link href="//fonts.googleapis.com/css?family=PT+Sans:regular,italic,bold,bolditalic" rel="stylesheet" type="text/css">
+
+  
+
+</head>
+
+<body   >
+  <header role="banner"><hgroup>
+  <h1><a href="/">Roslynn's Ramblings</a></h1>
+  
+    <h2>Ruby IRL</h2>
+  
+</hgroup>
+
+</header>
+  <nav role="navigation"><ul class="subscription" data-subscription="rss">
+  <li><a href="/atom.xml" rel="subscribe-rss" title="subscribe via RSS">RSS</a></li>
+  
+</ul>
+  
+<form action="https://www.google.com/search" method="get">
+  <fieldset role="search">
+    <input type="hidden" name="q" value="site:r0mg.github.io" />
+    <input class="search" type="text" name="q" results="0" placeholder="Search"/>
+  </fieldset>
+</form>
+  
+<ul class="main-navigation">
+  <li><a href="/">Blog</a></li>
+  <li><a href="/blog/archives">Archives</a></li>
+</ul>
+
+</nav>
+  <div id="main">
+    <div id="content">
+      <div>
+<article class="hentry" role="article">
+  
+  <header>
+    
+      <h1 class="entry-title">Sending Timed Emails Through ActiveJob</h1>
+    
+    
+      <p class="meta">
+        
+
+
+
+
+<time class='entry-date' datetime='2015-12-08T18:36:08-05:00'><span class='date'><span class='date-month'>Dec</span> <span class='date-day'>8</span><span class='date-suffix'>th</span>, <span class='date-year'>2015</span></span> <span class='time'>6:36 pm</span></time>
+        
+      </p>
+    
+  </header>
+
+
+<div class="entry-content"><p>I&rsquo;ve learned a lot about sending email through Rails during this project mode. Since our app (eBae) is an auction site with varying bidding windows and auction end times, our team thought it would be neat to go a step beyond a generic email notification to alert interested bidders when the end times for their watched items was soon approaching.</p>
+
+<p>To do this, we made a new &ldquo;watchlist&rdquo; mailer to send email notifications when items are added or removed from the watchlist, and a reminder for when the end time for an item on the watchlist is one hour away. The challenge in setting up the reminder notification is the time variance. Where our other mailers were instantiated through a create action (such as a new user account, or new sale), the reminder email would need to have a background process running to monitor the remaining time.</p>
+
+<p>Enter ActiveJob. Per the RailsGuides, &ldquo;Active Job is a framework for declaring jobs and making them run on a variety of queuing backends.&rdquo;
+When a &ldquo;Job&rdquo; is created, the task it is to perform is placed in a queue for a designmated amount of time. These queues are maintained by built-in adapters such as Sidekiq, Resque, and Delayed Job. For the purposes of sending reminder e-mails, Delayed Job does the trick.</p>
+
+<p>The first step in sending a reminder email is to generate a new Job:</p>
+
+<div class="console"><pre><code class="console"><span class="gp">// ♡</span> rails g job reminder_email   
+</code></pre>
+</div>
+
+
+<p>This step generates <code>reminder_email_job.rb</code> file in the <code>app/jobs directory.</code></p>
+
+<p>Within this file, the <code>perform</code> is defined as follows:</p>
+
+<div class="console"><pre><code class="html"><span class="gp">
+class ReminderEmailJob < ActiveJob::Base
+  queue_as :default
+
+  def perform(watchlist)
+    @watchlist = watchlist
+    WatchlistMailer.item_ending(@watchlist).deliver_later
+  end
+end
+</code></pre>
+</div>
+
+
+<p>The same argument <code>(watchlist)</code> that would normally be passed directly into the mailer from the controller is instead passed into the <code>ReminderEmailJob</code>, which is then passed into the regular mailer by calling on the appropriate method. In this case, the method in the <code>WatchlistMailer</code> to send out the reminder is <code>item_ending</code>.</p>
+
+<p>The next step is to modify the controller action. Prior to implementing the job, the mailer action in the create method would probably look something like this:</p>
+
+<div class="console"><pre><code class="html"><span class="gp">
+WatchlistMailer.item_ending(watchlist).deliver_now
+</code></pre>
+</div>
+
+
+<p>With the Job in place, it changes to the following:</p>
+
+<div class="console"><pre><code class="html"><span class="gp">
+EndingEmailJob.set(wait_until: watchlist.alert_time).perform_later(watchlist)
+</span></code></pre>
+</div>
+
+
+<p>&hellip;which directs the mailer action to the Job. Note that the <code>wait_until: watchlist.alert_time</code> is what determines the length of the delay. In this case, an <code>alert_time</code> method was defined in the  model to be one hour before a watched listing&rsquo;s ending time. Time parameters for delayed jobs are highly customizable.</p>
+
+<p>The last step is to configure the Delayed Jobs backend adapter for the backend process.</p>
+
+<ol>
+<li>Add <code>gem &lsquo;delayed_job_active_record&rsquo;</code> to the Gemfile</li>
+<li>Run the following from the terminal:
+<code class="console"><span class="gp">
+// ♡ bundle
+// ♡  rails generate delayed_job:active_record
+// ♡  rake db:migrate
+</span></code></li>
+<li>Add <code>config.active_job.queue_adapter = :delayed_job</code> to the <code>/config/environments/production.rb</code> and <code>/config/environments/development.rb</code> files.</li>
+<li>Run <code>// ♡ bundle exec rake jobs:work</code> alongside <code>rails s</code> to run the jobs in queue. While running the localhost, this must be running in the backend to ensure that the delayed jobs are processed.</li>
+<li>Enjoy!</li>
+</ol>
+
+</div>
+
+
+  <footer>
+    <p class="meta">
+      
+  
+
+<span class="byline author vcard">Posted by <span class="fn">Roslynn Graves</span></span>
+
+      
+
+
+
+
+<time class='entry-date' datetime='2015-12-08T18:36:08-05:00'><span class='date'><span class='date-month'>Dec</span> <span class='date-day'>8</span><span class='date-suffix'>th</span>, <span class='date-year'>2015</span></span> <span class='time'>6:36 pm</span></time>
+      
+
+
+    </p>
+    
+      <div class="sharing">
+  
+  <a href="//twitter.com/share" class="twitter-share-button" data-url="http://r0mg.github.io/blog/2015/12/08/sending-timed-emails-through-activejob/" data-via="" data-counturl="http://r0mg.github.io/blog/2015/12/08/sending-timed-emails-through-activejob/" >Tweet</a>
+  
+  
+  
+</div>
+
+    
+    <br />
+    <p class="meta">
+      
+        <a class="basic-alignment left" href="/blog/2015/11/16/theres-an-app-for-that/" title="Previous Post: There's (already) an App for That">&laquo; There's (already) an App for That</a>
+      
+      
+    </p>
+  </footer>
+</article>
+
+</div>
+
+<aside class="sidebar">
+  
+    <section>
+  <h1>Recent Posts</h1>
+  <ul id="recent_posts">
+    
+      <li class="post">
+        <a href="/blog/2015/12/08/sending-timed-emails-through-activejob/">Sending Timed Emails Through ActiveJob</a>
+      </li>
+    
+      <li class="post">
+        <a href="/blog/2015/11/16/theres-an-app-for-that/">There's (Already) an App for That</a>
+      </li>
+    
+      <li class="post">
+        <a href="/blog/2015/11/01/visualizing-relationships-with-rails-erd/">Visualizing Schema With Rails-ERD</a>
+      </li>
+    
+      <li class="post">
+        <a href="/blog/2015/10/15/my-second-post-on-octopress/">Databases in Business</a>
+      </li>
+    
+      <li class="post">
+        <a href="/blog/2015/09/28/my-first-post-on-octopress/">My First Post on Octopress</a>
+      </li>
+    
+  </ul>
+</section>
+
+
+
+
+
+  
+</aside>
+
+
+    </div>
+  </div>
+  <footer role="contentinfo"><p>
+  Copyright &copy; 2015 - Roslynn Graves -
+  <span class="credit">Powered by <a href="http://octopress.org">Octopress</a></span>
+</p>
+
+</footer>
+  
+
+
+
+
+
+
+
+  <script type="text/javascript">
+    (function(){
+      var twitterWidgets = document.createElement('script');
+      twitterWidgets.type = 'text/javascript';
+      twitterWidgets.async = true;
+      twitterWidgets.src = '//platform.twitter.com/widgets.js';
+      document.getElementsByTagName('head')[0].appendChild(twitterWidgets);
+    })();
+  </script>
+
+
+
+
+
+</body>
+</html>
